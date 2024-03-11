@@ -5,7 +5,9 @@ import Loading from './Loading'
 import { ErrorContext } from '../context/Error'
 import ErrorPage from './ErrorPage'
 import VoteElement from './VoteElement'
-const ArticleView = () => {
+import CommentsList from './CommentsList'
+
+const SingleArticle = () => {
     const {article_id} = useParams()
     const {error, setError} = useContext(ErrorContext)
     const [article, setArticle] = useState(null)
@@ -43,14 +45,16 @@ const ArticleView = () => {
 
     return (
         <section className='article-view article-card'>
-            <p>{article.title}</p>      
-            <p>author: {article.author}</p>
-            <img src={article.article_img_url}/>  
-            <p>{article.body}</p>
-            <VoteElement votes={article.votes} handleVoting={handleVoting}/>
+                <p>{article.title}</p>      
+                <p>author: {article.author}</p>
+                <img src={article.article_img_url}/>  
+                <p>{article.body}</p>
+                <VoteElement votes={article.votes} handleVoting={handleVoting}/>
+
+            {article.comment_count !== "0" && (<CommentsList article_id={article_id}/>)}
         </section>
     )
 
 }
 
-export default ArticleView
+export default SingleArticle

@@ -2,7 +2,7 @@ import './App.css'
 import ArticleList from './components/ArticleList';
 import { Routes, Route } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
-import ArticleView from './components/ArticleView';
+import SingleArticle from './components/SingleArticle';
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route path="/" element={ <ArticleList />} />
       <Route path="/articles" element={ <ArticleList />} />
-      <Route path="/articles/:article_id" element={<ArticleView/>} />
+      <Route path="/articles/:article_id" element={<SingleArticle/>} />
       <Route path="*" element={<ErrorPage/>} />
     </Routes>
   )
