@@ -14,9 +14,22 @@
 
 .article-card {
   border: 1px solid black;
+  text-decoration: none;
 
+  a {
+    text-decoration: none;
+    color: black;
+  }
   img {
     width: 250px;
     height: 300px;
   }
+}
+
+.vote-element {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }

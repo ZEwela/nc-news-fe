@@ -10,8 +10,7 @@ const ErrorPage = () => {
         setError({
             msg: null,
             status: null,
-            optionOne: null,
-            actionOne: null,
+            reloadButton: false,
             optionTwo: null,
             actionTwo: null,
             backButton: false
@@ -26,10 +25,8 @@ const ErrorPage = () => {
     return (
         <section className="error-page">
             <p>{error.msg}</p>
-            {error.optionOne && (
-                <Link to={error.actionOne}>
-                    <button onClick={resetError}>{error.optionOne}</button>
-                </Link>
+            {error.reloadButton && (
+                <button onClick={() => window.location.reload(false)}>Try again</button>
             )}
             {error.optionTwo && (
                 <Link to={error.actionTwo}>

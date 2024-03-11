@@ -6,8 +6,7 @@ export const ErrorProvider = ({children}) => {
     const [error, setError] = useState({
         msg: null,
         status: null,
-        optionOne: null,
-        actionOne: null,
+        reloadButton: false,
         optionTwo: null,
         actionTwo: null,
         backButton: false
