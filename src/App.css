@@ -4,3 +4,19 @@
   padding: 2rem;
   text-align: center;
 }
+.article-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  list-style-type: none;
+  gap: 1rem;
+} 
+
+.article-card {
+  border: 1px solid black;
+
+  img {
+    width: 250px;
+    height: 300px;
+  }
+}
