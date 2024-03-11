@@ -1,10 +1,14 @@
 import './App.css'
-import ArticleList from './components/ArticleList'
+import ArticleList from './components/ArticleList';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
 
   return (
-  <ArticleList />
+    <Routes>
+    <Route path="/" element={ <ArticleList />} />
+ 
+  </Routes>
   )
 }
 
