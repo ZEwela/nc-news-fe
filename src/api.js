@@ -38,3 +38,12 @@ export const patchCommentById = (commentId, body) => {
     })
 }
 
+export const removeComment = (commentId) => {
+    return newsAPI.delete(`/comments/${commentId}`).then(response => {
+        return response.data
+    })
+}
+
+
+
+
