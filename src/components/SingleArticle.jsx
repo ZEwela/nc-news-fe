@@ -50,8 +50,7 @@ const SingleArticle = () => {
                 <img src={article.article_img_url}/>  
                 <p>{article.body}</p>
                 <VoteElement votes={article.votes} handleVoting={handleVoting}/>
-
-            {article.comment_count !== "0" && (<CommentsList article_id={article_id}/>)}
+                <CommentsList article_id={article_id}/>
         </section>
     )
 

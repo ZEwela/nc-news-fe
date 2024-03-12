@@ -44,9 +44,29 @@
 .comments-list {
   margin-top: 1rem;
   padding: 1rem;
+  button {
+    margin: 1rem
+  }
 }
 
 .comment-card {
   margin: 0.5rem
 }
 
+.add-comment {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+.comment-input {
+  width: 40%;
+}

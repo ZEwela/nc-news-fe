@@ -26,8 +26,15 @@ export const getCommentsByArticleId = (articleId) => {
     })
 }
 
+export const postCommentByArticleId = (articleId, body) => {
+    return newsAPI.post(`/articles/${articleId}/comments`, body).then(response => {
+        return response.data.comment
+    })
+}
+
 export const patchCommentById = (commentId, body) => {
     return newsAPI.patch(`/comments/${commentId}`, body).then(response => {
         return response.data.comment
     })
 }
+
