@@ -3,7 +3,17 @@ import { useState } from "react"
 const VoteElement = ({votes, handleVoting}) => {
 
     const [votesDisplay, setVotesDisplay] = useState(votes)   
+    const [upvoteDisabled, setUpvoteDisabled] = useState(false)
+    const [downvoteDisabled, setDownvoteDisabled] = useState(votes <= 0)
+
     const handleVotesDisplayChange = (newVote) => {
+        if (newVote === 1) {
+            setUpvoteDisabled((currState) => !currState)
+            setDownvoteDisabled((currState) => currState ? !currState : currState)
+        } else {
+            setDownvoteDisabled((currState) => !currState)
+            setUpvoteDisabled((currState) => currState ? !currState : currState)
+        }
         setVotesDisplay(currVotesDisplay => {
             return currVotesDisplay + newVote
         })
@@ -14,9 +24,9 @@ const VoteElement = ({votes, handleVoting}) => {
     return (
         <div className="border">
             <section className="vote-element">
-                 <button onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>
-                 {votesDisplay !== 0 && <p>Sentiment: {votesDisplay}</p>}
-                 <button onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
+                 {<button disabled={upvoteDisabled} onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>}
+                 {votesDisplay !== 0 && <p>Votes: {votesDisplay}</p>}
+                 <button disabled={downvoteDisabled} onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
             </section>
         </div>
     )
