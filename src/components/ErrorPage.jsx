@@ -23,7 +23,7 @@ const ErrorPage = () => {
     }
 
     return (
-        <section className="error-page">
+        <section className="error-page big-screen">
             <p>{error.msg}</p>
             {error.reloadButton && (
                 <button onClick={() => window.location.reload(false)}>Try again</button>
