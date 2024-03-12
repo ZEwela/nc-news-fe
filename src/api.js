@@ -19,3 +19,22 @@ export const patchArticleById = (articleId, body) => {
         return response.data.article
     })
 }
+
+export const getCommentsByArticleId = (articleId) => {
+    return newsAPI.get(`/articles/${articleId}/comments`).then(response => {
+        return response.data.comments
+    })
+}
+
+export const postCommentByArticleId = (articleId, body) => {
+    return newsAPI.post(`/articles/${articleId}/comments`, body).then(response => {
+        return response.data.comment
+    })
+}
+
+export const patchCommentById = (commentId, body) => {
+    return newsAPI.patch(`/comments/${commentId}`, body).then(response => {
+        return response.data.comment
+    })
+}
+

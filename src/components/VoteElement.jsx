@@ -10,12 +10,15 @@ const VoteElement = ({votes, handleVoting}) => {
     } 
 
 
+
     return (
-        <section className="vote-element">
-            <button onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>
-            <p>{votesDisplay}</p>
-            <button onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
-        </section>
+        <div className="border">
+            <section className="vote-element">
+                 <button onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>
+                 {votesDisplay !== 0 && <p>Sentiment: {votesDisplay}</p>}
+                 <button onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
+            </section>
+        </div>
     )
 }
 

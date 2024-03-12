@@ -4,6 +4,11 @@
   padding: 2rem;
   text-align: center;
 }
+
+.border {
+  border: 1px solid black;
+}
+
 .article-list {
   display: flex;
   flex-direction: column;
@@ -13,7 +18,6 @@
 } 
 
 .article-card {
-  border: 1px solid black;
   text-decoration: none;
 
   a {
@@ -32,4 +36,37 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin: 10px;
+
+
+}
+
+.comments-list {
+  margin-top: 1rem;
+  padding: 1rem;
+  button {
+    margin: 1rem
+  }
+}
+
+.comment-card {
+  margin: 0.5rem
+}
+
+.add-comment {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+.comment-input {
+  width: 40%;
 }
