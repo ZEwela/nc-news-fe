@@ -4,11 +4,13 @@ import { Routes, Route } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import SingleArticle from './components/SingleArticle';
 import DrawerDisplay from './components/DrawerDisplay';
+import Header from './components/Header';
 
 function App() {
 
   return (
     <>
+    <Header/>
     <DrawerDisplay />
     <Routes>
       <Route path="/" element={ <ArticleList />} />
