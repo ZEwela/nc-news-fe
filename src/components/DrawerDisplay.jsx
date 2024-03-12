@@ -5,6 +5,7 @@ import { getTopics } from "../api";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/User";
 
+
 const DrawerDisplay = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
@@ -23,6 +24,8 @@ const DrawerDisplay = () => {
     const loggedInActions = [{name: 'My profile', link:""}, {name: 'My articles', link:""}, {name: 'Add article', link:""}]
     const basicActions = [{name: 'All articles', link:"/articles"}]
 
+    const formattedLinks = (link) => link.replace(/ /g, '-');
+
   
     const handleDrawerClose = () => {
       setIsClosing(true);
@@ -39,19 +42,22 @@ const DrawerDisplay = () => {
       }
     };
 
+  
+
+
     const drawer = (
         <>
             <Toolbar />
             <Divider />
             <List>
               { basicActions.map((action) => (
-                <ListItem key={action.name} disablePadding>
-                  <ListItemButton onClick={handleDrawerClose}>
-                      <Link to={action.link}>
+                <Link key={action.name} to={action.link} >
+                  <ListItem  disablePadding>
+                    <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={action.name} />
-                      </Link>
-                  </ListItemButton>
-                </ListItem>
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
               ))}
             </List>
             <Divider />
@@ -60,13 +66,13 @@ const DrawerDisplay = () => {
               <List>
                 <ListSubheader>Topics</ListSubheader> 
                 {topics.map((topic) => (
-                  <ListItem key={topic.slug} disablePadding>
-                    <ListItemButton onClick={handleDrawerClose}>
-                      <Link to={`/topics/${topic.slug}`}>
+                  <Link  key={topic.slug} to={`/topics/${topic.slug}`}>
+                    <ListItem disablePadding>
+                      <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={topic.slug} />
-                      </Link>
-                    </ListItemButton>
-                  </ListItem>
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 ))}
               </List>
               <Divider />
@@ -74,11 +80,13 @@ const DrawerDisplay = () => {
             { user.username && <>
               <List>
                 { loggedInActions.map((action) => (
-                  <ListItem key={action.name} disablePadding>
-                    <ListItemButton onClick={handleDrawerClose}>
-                      <ListItemText primary={action.name} />
-                    </ListItemButton>
-                  </ListItem>
+                  <Link  key={action.name} to={formattedLinks(action.name)}>
+                    <ListItem disablePadding>
+                      <ListItemButton onClick={handleDrawerClose}>
+                        <ListItemText primary={action.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>                  
                 ))}
               </List>
               <Divider />
