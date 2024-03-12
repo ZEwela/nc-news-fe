@@ -27,7 +27,7 @@ const ArticleList = () => {
     if(error.msg) return <p>{error.msg}</p>
 
     return (
-        <section className="article-list">
+        <section className="article-list big-screen">
             {articles.map((article) => {
                return  <ArticleCard key={article.article_id} article={article}/> 
             })}

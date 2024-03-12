@@ -44,6 +44,10 @@ export const removeComment = (commentId) => {
     })
 }
 
-
+export const getTopics = () => {
+    return newsAPI.get("/topics").then(response => {
+        return response.data.topics
+    })
+}
 
 
