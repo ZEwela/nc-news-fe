@@ -38,7 +38,7 @@ const CommentsList = ({article_id}) => {
             { showAddComment && <AddComment articleId={article_id} setComments={setComments} handleTogglingOnAddComment={handleTogglingOnAddComment} handleTogglingOnCancelAddComment={handleTogglingOnCancelAddComment}/>}
             { showComments && comments.map((comment) => {
                     return (
-                        <CommentCard key={comment.comment_id} comment={comment}/>
+                        <CommentCard key={comment.comment_id} comment={comment} setComments={setComments}/>
                     )
                 })
             }

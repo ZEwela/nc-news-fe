@@ -70,3 +70,8 @@
 .comment-input {
   width: 40%;
 }
+
+.comment-card-error {
+  margin-top: 0;
+  color: rgb(211, 58, 58);
+}
