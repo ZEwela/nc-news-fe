@@ -26,9 +26,18 @@
     color: black;
   }
   img {
-    width: 250px;
-    height: 300px;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
   }
+}
+
+.horizontal {
+  display:  flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 1rem
 }
 
 .vote-element {
@@ -61,6 +70,8 @@
   gap: 1rem;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+
 
   button {
     width: fit-content;
@@ -69,7 +80,7 @@
 }
 
 .comment-input {
-  width: 40%;
+  flex-grow: 3;
 }
 
 .comment-card-error {
