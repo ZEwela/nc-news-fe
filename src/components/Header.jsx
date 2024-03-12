@@ -2,7 +2,11 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-        <Link to="/articles"><h1 className="big-screen">News</h1></Link>
+        <header>
+            <Link to="/articles" onClick={() => window.location.href="/articles"}>
+                <h1 className="logo">News</h1>
+            </Link>
+        </header>
 
     )
 }
