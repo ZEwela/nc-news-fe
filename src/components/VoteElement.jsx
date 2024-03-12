@@ -6,8 +6,6 @@ const VoteElement = ({votes, handleVoting}) => {
     const [upvoteDisabled, setUpvoteDisabled] = useState(false)
     const [downvoteDisabled, setDownvoteDisabled] = useState(votes <= 0)
 
-    console.log(!votes)
-
     const handleVotesDisplayChange = (newVote) => {
         if (newVote === 1) {
             setUpvoteDisabled((currState) => !currState)
@@ -27,7 +25,7 @@ const VoteElement = ({votes, handleVoting}) => {
         <div className="border">
             <section className="vote-element">
                  {<button disabled={upvoteDisabled} onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>}
-                 {votesDisplay !== 0 && <p>Sentiment: {votesDisplay}</p>}
+                 {votesDisplay !== 0 && <p>Votes: {votesDisplay}</p>}
                  <button disabled={downvoteDisabled} onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
             </section>
         </div>
