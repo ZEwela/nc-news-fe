@@ -44,8 +44,10 @@ const AddComment = ({articleId, setComments, handleTogglingOnAddComment, handleT
               multiline
               maxRows={5}
             />
-            <button  disabled={newComment.body.length < 2} type="submit" onClick={handleAddingComment}>Add comment</button>
-            <button type="reset" onClick={handleTogglingOnCancelAddComment}>Cancel</button>
+            <div className="add-comment-actions">
+              <button  disabled={newComment.body.length < 2} type="submit" onClick={handleAddingComment}>Add comment</button>
+              <button type="reset" onClick={handleTogglingOnCancelAddComment}>Cancel</button>
+            </div>
         </form>
     )
 }

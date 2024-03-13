@@ -9,6 +9,8 @@
   border: 1px solid black;
 }
 
+
+
 .article-list {
   display: flex;
   flex-direction: column;
@@ -26,9 +28,18 @@
     color: black;
   }
   img {
-    width: 250px;
-    height: 300px;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
   }
+}
+
+.horizontal {
+  display:  flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 1rem
 }
 
 .vote-element {
@@ -61,6 +72,8 @@
   gap: 1rem;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+
 
   button {
     width: fit-content;
@@ -69,7 +82,7 @@
 }
 
 .comment-input {
-  width: 40%;
+  flex-grow: 3;
 }
 
 .comment-card-error {
@@ -82,8 +95,29 @@ a {
   color: black;
 }
 
+a.logo {
+    display: block;
+    position: relative;
+    left: 16px;
+    text-align: left;
+    width: fit-content;
+
+}
+
+
+
 @media only screen and (min-width: 600px) {
   .big-screen {
     margin-left: 240px;
+  }
+
+  header {
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    margin-top: 0;
+    top: 0;
+    left: 0;
+    z-index: 1201;
   }
 }

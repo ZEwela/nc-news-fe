@@ -4,11 +4,18 @@ const ArticleCard = ({article}) => {
     return (
         <section className="border article-card">
             <Link to={`/articles/${article.article_id}`}> 
-                <p>{article.title}</p>      
-                <p>author: {article.author}</p>
+                <h2>{article.title}</h2>   
+                <div className='horizontal'>
+                    <p><strong>author:</strong> {article.author}</p>
+                    <p><strong>created:</strong> {article.created_at.slice(0,10)}</p>
+                </div> 
                 <img src={article.article_img_url}/>  
+                <div className="horizontal">
+                    <p><strong>votes:</strong> {article.votes}</p>
+                    <p><strong>comments:</strong> {article.comment_count}</p>
+                </div>
             </Link>
-            <p>votes: {article.votes}</p>
+
         </section>
     )  
 }
