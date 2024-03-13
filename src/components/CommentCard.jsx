@@ -2,13 +2,13 @@ import { useContext, useState } from "react"
 import { patchCommentById, removeComment } from "../api"
 import VoteElement from "./VoteElement"
 import { UserContext } from "../context/User"
-import { ErrorContext } from "../context/Error"
 
 const CommentCard = ({comment, setComments}) => {
 
     const {user} = useContext(UserContext)
     const [errorMsg, setErrorMsg] = useState(null)
     const [disabled, setDisabled] = useState(false)
+    const [reloadButton, setReloadButton] = useState(false)
 
 
     const handleVoting = (vote) => {
@@ -23,6 +23,9 @@ const CommentCard = ({comment, setComments}) => {
                     return  currComments.filter((currComment) => currComment.comment_id !== comment.comment_id)
                 })
         ).catch((err) => {
+            if (err.response.status === 400) {
+                setReloadButton(currState => !currState)
+            } 
             setErrorMsg('Something went wrong. Please try again')
             setDisabled((currState) => !currState)
         })
@@ -35,7 +38,8 @@ return (
         <p>{comment.body}</p>
         <VoteElement votes={comment.votes} handleVoting={handleVoting}/>
         { user.username === comment.author && <button onClick={handleDeleting} disabled={disabled}>Delete</button>}
-        {errorMsg && <p className="comment-card-error">{errorMsg}</p>}
+        {errorMsg && <p className="comment-card-error">{errorMsg} <button onClick={() => window.location.reload(false)}>Reload</button></p>}
+     
     </section>
 )
 
