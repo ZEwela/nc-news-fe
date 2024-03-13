@@ -8,7 +8,6 @@ const CommentCard = ({comment, setComments}) => {
     const {user} = useContext(UserContext)
     const [errorMsg, setErrorMsg] = useState(null)
     const [disabled, setDisabled] = useState(false)
-    const [reloadButton, setReloadButton] = useState(false)
 
 
     const handleVoting = (vote) => {
@@ -22,10 +21,7 @@ const CommentCard = ({comment, setComments}) => {
             setComments(currComments => {
                     return  currComments.filter((currComment) => currComment.comment_id !== comment.comment_id)
                 })
-        ).catch((err) => {
-            if (err.response.status === 400) {
-                setReloadButton(currState => !currState)
-            } 
+        ).catch((err) => { 
             setErrorMsg('Something went wrong. Please try again')
             setDisabled((currState) => !currState)
         })
