@@ -39,6 +39,8 @@
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
+  align-items: center;
+  justify-items: center;
   gap: 1rem
 }
 
@@ -86,8 +88,16 @@
 }
 
 .comment-card-error {
-  margin-top: 0;
   color: rgb(211, 58, 58);
+
+  p {
+    margin: 0
+  }
+}
+
+.comment-card-msg {
+  margin: 0;
+  gap: 0.5rem
 }
 
 a {
