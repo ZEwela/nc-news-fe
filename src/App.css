@@ -95,17 +95,20 @@ a {
   color: black;
 }
 
+a.logo {
+    display: block;
+    position: relative;
+    left: 16px;
+    text-align: left;
+    width: fit-content;
+
+}
 
 
 
 @media only screen and (min-width: 600px) {
   .big-screen {
     margin-left: 240px;
-  }
-  .logo {
-    position: relative;
-    left: 20px;
-    text-align: left;
   }
 
   header {

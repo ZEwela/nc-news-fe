@@ -3,22 +3,27 @@ import { getArticles } from "../api"
 import ArticleCard from "./ArticleCard"
 import Loading from "./Loading"
 import { ErrorContext } from "../context/Error"
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 
 
 const ArticleList = () => {
     const [articles, setArticles] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [sort, setSort] = useState("created_at")
-    const [order, setOrder] = useState("desc")
-
+    const [searchParams, setSearchParams] = useSearchParams();
     const {error, setError} = useContext(ErrorContext);
     const {topic} = useParams()
 
+    const [sort, setSort] = useState(searchParams.get('sort')|| "created_at")
+    const [order, setOrder] = useState(searchParams.get('order')||"desc")
+
+   
+ 
     useEffect(() => {
+        
         getArticles(topic, sort, order).then((articlesFromApi) => {
             setArticles(articlesFromApi)
+            setSearchParams({ sort: sort, order: order });
             setLoading(false)
         }).catch(err => {
             setError((currError => {
@@ -42,7 +47,7 @@ const ArticleList = () => {
 
     return (
         <>
-            <section>
+            <section className="big-screen">
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-helper-label">Sort by</InputLabel>
                     <Select

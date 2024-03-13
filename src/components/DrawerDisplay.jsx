@@ -121,7 +121,7 @@ const DrawerDisplay = () => {
                   }}
                   sx={{
                     display: { xs: 'block', sm: 'none' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, top: 10 },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, top: 16 },
                   }}
                 >
                   {drawer}
@@ -130,7 +130,7 @@ const DrawerDisplay = () => {
                   variant="permanent"
                   sx={{
                     display: { xs: 'none', sm: 'block' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, top: 10 },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, top: 16 },
                   }}
                   open
                 >
