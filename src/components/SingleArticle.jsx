@@ -22,9 +22,6 @@ const SingleArticle = () => {
                 return {...currErr, 
                     msg: err.response.data.msg, 
                     status: err.response.status, 
-                    reloadButton: true,
-                    optionTwo: 'Go back to main',
-                    actionTwo: `/`,
                  }
             })
             setLoading(false)
