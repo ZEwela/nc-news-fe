@@ -7,13 +7,23 @@ export const ErrorProvider = ({children}) => {
         msg: null,
         status: null,
         reloadButton: false,
-        optionTwo: null,
-        actionTwo: null,
-        backButton: false
+        optionText: null,
+        optionAction: null,
     })
 
+    const resetError = () => {
+        setError({
+            msg: null,
+            status: null,
+            reloadButton: false,
+            optionText: null,
+            optionAction: null,
+        })
+
+    }
+
     return (
-        <ErrorContext.Provider value={{error, setError}}>
+        <ErrorContext.Provider value={{error, setError, resetError}}>
             {children}
         </ErrorContext.Provider>
     )

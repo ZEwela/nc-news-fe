@@ -5,6 +5,7 @@ import Loading from "./Loading"
 import { ErrorContext } from "../context/Error"
 import { useParams, useSearchParams } from "react-router-dom"
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
+import ErrorPage from "./ErrorPage"
 
 
 const ArticleList = () => {
@@ -17,18 +18,20 @@ const ArticleList = () => {
     const [sort, setSort] = useState(searchParams.get('sort')|| "created_at")
     const [order, setOrder] = useState(searchParams.get('order')||"desc")
 
-   
- 
+    
+    
     useEffect(() => {
-        
         getArticles(topic, sort, order).then((articlesFromApi) => {
             setArticles(articlesFromApi)
             setSearchParams({ sort: sort, order: order });
             setLoading(false)
         }).catch(err => {
+            setLoading(false)
             setError((currError => {
-                setLoading(false)
-                return {...currError, msg: 'Something went wrong. Please try again'}
+                return {...currError, 
+                    msg: err.response.data.msg,
+                    status: err.response.status, 
+                }
             }))
         })
     }, [topic, sort, order])
@@ -42,8 +45,8 @@ const ArticleList = () => {
     }
 
     if (loading) return <Loading/>
-    if(error.msg) return <p>{error.msg}</p>
-    if(!articles.length) return <p>There are no articles in this section</p>
+    if(error.msg) return <ErrorPage />
+    if(!articles.length) return <p className="big-screen">There are no articles in this section</p>
 
     return (
         <>

@@ -104,6 +104,18 @@ a.logo {
 
 }
 
+.error-page {
+  p {
+    font-size: larger;
+    color: rgb(211, 58, 58);
+  }
+}
+
+.error-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
 
 
 @media only screen and (min-width: 600px) {

@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { getTopics } from "../api";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/User";
+import { ErrorContext } from "../context/Error";
 
 
 const DrawerDisplay = () => {
@@ -12,6 +13,7 @@ const DrawerDisplay = () => {
     const [topics, setTopics] = useState([])
 
     const {user} = useContext(UserContext)
+    const {resetError} = useContext(ErrorContext)
 
     const drawerWidth = 240;
 
@@ -30,6 +32,7 @@ const DrawerDisplay = () => {
     const handleDrawerClose = () => {
       setIsClosing(true);
       setMobileOpen(false);
+      resetError()
     };
   
     const handleDrawerTransitionEnd = () => {
