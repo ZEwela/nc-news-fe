@@ -10,9 +10,9 @@ import ErrorPage from "./ErrorPage"
 
 const ArticleList = () => {
     const [articles, setArticles] = useState(null)
+    const [totalArticles, setTotalArticles] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [loadMoreDisabled, setLoadMoreDisabled] = useState(false)
-    const [loadLessDisabled, setLoadLessDisabled] = useState(true) 
+    const [loadMoreButtonDisabled, setLoadMoreButtonDisabled] = useState(false)
     const [lengthOfLoadedArticles, setlengthOfLoadedArticles] = useState(0)
     const [searchParams, setSearchParams] = useSearchParams();
     const {error, setError} = useContext(ErrorContext);
@@ -21,6 +21,7 @@ const ArticleList = () => {
     const [sort, setSort] = useState(searchParams.get('sort_by')|| "created_at")
     const [order, setOrder] = useState(searchParams.get('order')||"desc")
     const [p, setP] = useState(searchParams.get('p')||1)
+    const [limit] = useState(10)
 
     const queries =  [
         "sort_by",
@@ -30,7 +31,7 @@ const ArticleList = () => {
     const acceptableQueryValues =  /^(created_at|comment_count|votes|desc|asc|\d+)$/
 
     useEffect(() => {
-        setSearchParams((currParams) => {return {sort_by: sort, order: order}})
+        setSearchParams((currParams) => {return {...currParams, sort_by: sort, order: order}})
         for (const entry of searchParams.entries()) {
             if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {
                 setLoading(false)
@@ -43,8 +44,9 @@ const ArticleList = () => {
                 return 
             }
         }
-        getArticles(topic, sort, order, p).then((articlesFromApi) => {
-            setArticles(articlesFromApi)
+        getArticles(topic, sort, order, p).then((dataFromApi) => {
+            setArticles(dataFromApi.articles)
+            setTotalArticles(dataFromApi.total_count)
             setLoading(false)
         }).catch(err => {
             setLoading(false)
@@ -67,16 +69,15 @@ const ArticleList = () => {
 
 
     const handleLoadMore = () => {
-        setLoadLessDisabled(currState => false)
         setP(currState =>  {return Number(currState)+1})
         const newP = String(+p + 1)
-        getArticles(topic, sort, order, newP).then((articlesFromApi) => {
-            setlengthOfLoadedArticles(articlesFromApi.length)
-            if (articlesFromApi.length < 10 ) {  setLoadMoreDisabled(currState => !currState) }
-            setArticles(currArticles => { return [...currArticles, ...articlesFromApi]})
+        getArticles(topic, sort, order, newP).then((dataFromApi) => {
+            setlengthOfLoadedArticles(dataFromApi.articles.length)
+            if (dataFromApi.total_count < 10 ) {  setLoadMoreButtonDisabled(currState => !currState) }
+            setArticles(currArticles => { return [...currArticles, ...dataFromApi.articles]})
         }).catch(err => {
             setLoading(false)
-            setError((currError => {q
+            setError((currError => {
                 return {...currError, 
                     msg: err.response.data.msg,
                     status: err.response.status, 
@@ -86,15 +87,16 @@ const ArticleList = () => {
     }
 
     const handleLoadLess = () => {
-        let endIndex = 10
-        setP(currState =>  {return Number(currState)-1})
-        setLoadMoreDisabled(false)
-        if (lengthOfLoadedArticles !== 10) {
-            endIndex = lengthOfLoadedArticles
-            setlengthOfLoadedArticles(10)
+        let endIndexForSlice = limit
+        setP(currState =>  {
+            return Number(currState)-1}
+        )
+        if (lengthOfLoadedArticles !== limit) {
+            endIndexForSlice = lengthOfLoadedArticles
+            setlengthOfLoadedArticles(limit)
         }
         setArticles(currArticles => {
-            return currArticles.slice(0, (articles.length - endIndex))
+            return currArticles.slice(0, (articles.length - endIndexForSlice))
         })
     }
 
@@ -140,10 +142,10 @@ const ArticleList = () => {
                 })}
             </section>
             <section>
-                <button disabled={loadMoreDisabled} onClick={ () => handleLoadMore()} className="article-list-load-button">
+                {articles.length !== totalArticles && <button disabled={loadMoreButtonDisabled} onClick={ () => handleLoadMore()} className="article-list-load-button">
                     Load more
-                </button>
-                { articles.length > 10 && <button onClick={handleLoadLess} className="article-list-load-button">
+                </button>}
+                { articles.length > limit && <button onClick={handleLoadLess} className="article-list-load-button">
                     Load less
                 </button>}
             </section>
