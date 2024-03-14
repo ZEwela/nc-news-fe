@@ -15,14 +15,9 @@ const ArticleList = () => {
     const {error, setError} = useContext(ErrorContext);
     const {topic} = useParams()
    
-
-
-    
-
     const [sort, setSort] = useState(searchParams.get('sort_by')|| "created_at")
     const [order, setOrder] = useState(searchParams.get('order')||"desc")
     const [p, setP] = useState(searchParams.get('p')||1)
-
 
     const queries =  [
         "sort_by",
@@ -49,7 +44,6 @@ const ArticleList = () => {
             setArticles(articlesFromApi)
             setLoading(false)
         }).catch(err => {
-            console.log(err)
             setLoading(false)
             setError((currError => {
                 return {...currError, 
