@@ -127,6 +127,10 @@ a.logo {
   gap: 1rem;
 }
 
+.article-list-load-button {
+  margin: 1rem;
+}
+
 
 @media only screen and (min-width: 600px) {
   .big-screen {
