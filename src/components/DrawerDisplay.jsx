@@ -54,7 +54,7 @@ const DrawerDisplay = () => {
             <Divider />
             <List>
               { basicActions.map((action) => (
-                <Link key={action.name} to={action.link} >
+                <Link key={action.name} to={action.link}  onClick={() => window.location.href=action.link}>
                   <ListItem  disablePadding>
                     <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={action.name} />
@@ -69,7 +69,7 @@ const DrawerDisplay = () => {
               <List>
                 <ListSubheader>Topics</ListSubheader> 
                 {topics.map((topic) => (
-                  <Link  key={topic.slug} to={`/topics/${topic.slug}`}>
+                  <Link  key={topic.slug} to={`/topics/${topic.slug}`} onClick={() => window.location.href=`/topics/${topic.slug}`}>
                     <ListItem disablePadding>
                       <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={topic.slug} />

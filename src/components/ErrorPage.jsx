@@ -1,16 +1,23 @@
 import { useContext, useEffect } from "react"
 import { ErrorContext } from "../context/Error"
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const ErrorPage = () => {
     const {error, setError, resetError} = useContext(ErrorContext)
     const navigate = useNavigate()
+    const location =  useLocation()
 
     useEffect(() => {
         let errMsg = error.msg;
         const otherOptionsChange = {}
         if (error.status === 404 || !error.msg) {
-            errMsg = "Not Found"
+            if (location.pathname.includes("articles")) {
+                errMsg = "Article Not Found"
+            } else if (location.pathname.includes("topic")) {
+                errMsg = "Topic Not Found"
+            } else {
+                errMsg = "Page Not Found"
+            }
         } else if (error.status){
             errMsg = "Sorry something went wrong!"
             otherOptionsChange.reloadButton = true
@@ -27,7 +34,7 @@ const ErrorPage = () => {
                 <button onClick={() =>{window.location.reload(false); resetError()}}>Try again</button>
             )}
             <button onClick={() =>{window.location.href="/articles"; resetError()}}>Go to main</button>
-            <button onClick={() => {navigate(-1), resetError}}>Go back</button>
+            <button onClick={() => { resetError, navigate(location.search === "" ? -1 : -2 )}}>Go back</button>
             {error.optionText && (
                 <Link to={error.optionAction}>
                     <button onClick={resetError}>{error.optionText}</button>

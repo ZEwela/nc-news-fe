@@ -14,18 +14,42 @@ const ArticleList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const {error, setError} = useContext(ErrorContext);
     const {topic} = useParams()
+   
 
-    const [sort, setSort] = useState(searchParams.get('sort')|| "created_at")
+
+    
+
+    const [sort, setSort] = useState(searchParams.get('sort_by')|| "created_at")
     const [order, setOrder] = useState(searchParams.get('order')||"desc")
+    const [p, setP] = useState(searchParams.get('p')||1)
 
-    
-    
+
+    const queries =  [
+        "sort_by",
+        "order",
+        "p"
+        ]
+    const acceptableQueryValues =  /^(created_at|comment_count|votes|desc|asc|\d+)$/
+
     useEffect(() => {
+        setSearchParams((currParams) => {return {sort_by: sort, order: order, p: p}})
+        for (const entry of searchParams.entries()) {
+            if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {
+                setLoading(false)
+                setError((currError => {
+                    return {...currError, 
+                        msg: "Sorry something went wrong",
+                        status: 400, 
+                    }
+                }))
+                return 
+            }
+        }
         getArticles(topic, sort, order).then((articlesFromApi) => {
             setArticles(articlesFromApi)
-            setSearchParams({ sort: sort, order: order });
             setLoading(false)
         }).catch(err => {
+            console.log(err)
             setLoading(false)
             setError((currError => {
                 return {...currError, 
@@ -46,7 +70,7 @@ const ArticleList = () => {
 
     if (loading) return <Loading/>
     if(error.msg) return <ErrorPage />
-    if(!articles.length) return <p className="big-screen">There are no articles in this section</p>
+    if(!articles?.length) return <p className="big-screen">There are no articles in this section</p>
 
     return (
         <>
@@ -71,7 +95,7 @@ const ArticleList = () => {
                       labelId="demo-simple-select-helper-label"
                       id="demo-simple-select-helper"
                       value={order}
-                      label="Sort by"
+                      label="Order"
                       onChange={handleOrderChange}
                     >
                         <MenuItem value="asc">Asc</MenuItem>
