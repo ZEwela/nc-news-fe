@@ -6,6 +6,7 @@ import { ErrorContext } from "../context/Error"
 import { useParams, useSearchParams } from "react-router-dom"
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import ErrorPage from "./ErrorPage"
+import LoadItems from "./LoadItems"
 
 
 const ArticleList = () => {
@@ -73,7 +74,7 @@ const ArticleList = () => {
         const newP = String(+p + 1)
         getArticles(topic, sort, order, newP).then((dataFromApi) => {
             setlengthOfLoadedArticles(dataFromApi.articles.length)
-            if (dataFromApi.total_count < 10 ) {  setLoadMoreButtonDisabled(currState => !currState) }
+            if (newP === 1 ) {  setLoadMoreButtonDisabled(false) }
             setArticles(currArticles => { return [...currArticles, ...dataFromApi.articles]})
         }).catch(err => {
             setLoading(false)
@@ -141,14 +142,7 @@ const ArticleList = () => {
                    return  <ArticleCard key={article.article_id} article={article}/> 
                 })}
             </section>
-            <section>
-                {articles.length !== totalArticles && <button disabled={loadMoreButtonDisabled} onClick={ () => handleLoadMore()} className="article-list-load-button">
-                    Load more
-                </button>}
-                { articles.length > limit && <button onClick={handleLoadLess} className="article-list-load-button">
-                    Load less
-                </button>}
-            </section>
+            <LoadItems  itemsLength={articles.length} totalItems={totalArticles} limit={limit} loadMoreButtonDisabled={loadMoreButtonDisabled} handleLoadMore={handleLoadMore} handleLoadLess={handleLoadLess}/>
         </section>
     )
 }

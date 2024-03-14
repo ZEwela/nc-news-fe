@@ -20,8 +20,8 @@ export const patchArticleById = (articleId, body) => {
     })
 }
 
-export const getCommentsByArticleId = (articleId) => {
-    return newsAPI.get(`/articles/${articleId}/comments`).then(response => {
+export const getCommentsByArticleId = (articleId, p) => {
+    return newsAPI.get(`/articles/${articleId}/comments`, { params: { p: p }}).then(response => {
         return response.data.comments
     })
 }
