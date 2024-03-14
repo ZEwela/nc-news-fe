@@ -11,6 +11,9 @@ import ErrorPage from "./ErrorPage"
 const ArticleList = () => {
     const [articles, setArticles] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [loadMoreDisabled, setLoadMoreDisabled] = useState(false)
+    const [loadLessDisabled, setLoadLessDisabled] = useState(true) 
+    const [lengthOfLoadedArticles, setlengthOfLoadedArticles] = useState(0)
     const [searchParams, setSearchParams] = useSearchParams();
     const {error, setError} = useContext(ErrorContext);
     const {topic} = useParams()
@@ -27,7 +30,7 @@ const ArticleList = () => {
     const acceptableQueryValues =  /^(created_at|comment_count|votes|desc|asc|\d+)$/
 
     useEffect(() => {
-        setSearchParams((currParams) => {return {sort_by: sort, order: order, p: p}})
+        setSearchParams((currParams) => {return {sort_by: sort, order: order}})
         for (const entry of searchParams.entries()) {
             if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {
                 setLoading(false)
@@ -40,7 +43,7 @@ const ArticleList = () => {
                 return 
             }
         }
-        getArticles(topic, sort, order).then((articlesFromApi) => {
+        getArticles(topic, sort, order, p).then((articlesFromApi) => {
             setArticles(articlesFromApi)
             setLoading(false)
         }).catch(err => {
@@ -62,13 +65,47 @@ const ArticleList = () => {
         setOrder(e.target.value)
     }
 
+
+    const handleLoadMore = () => {
+        setLoadLessDisabled(currState => false)
+        setP(currState =>  {return Number(currState)+1})
+        const newP = String(+p + 1)
+        getArticles(topic, sort, order, newP).then((articlesFromApi) => {
+            setlengthOfLoadedArticles(articlesFromApi.length)
+            if (articlesFromApi.length < 10 ) {  setLoadMoreDisabled(currState => !currState) }
+            setArticles(currArticles => { return [...currArticles, ...articlesFromApi]})
+        }).catch(err => {
+            setLoading(false)
+            setError((currError => {q
+                return {...currError, 
+                    msg: err.response.data.msg,
+                    status: err.response.status, 
+                }
+            }))
+        })
+    }
+
+    const handleLoadLess = () => {
+        let endIndex = 10
+        setP(currState =>  {return Number(currState)-1})
+        setLoadMoreDisabled(false)
+        if (lengthOfLoadedArticles !== 10) {
+            endIndex = lengthOfLoadedArticles
+            setlengthOfLoadedArticles(10)
+        }
+        setArticles(currArticles => {
+            return currArticles.slice(0, (articles.length - endIndex))
+        })
+    }
+
     if (loading) return <Loading/>
     if(error.msg) return <ErrorPage />
     if(!articles?.length) return <p className="big-screen">There are no articles in this section</p>
 
     return (
-        <>
-            <section className="big-screen">
+      
+        <section className="big-screen">
+            <section >
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-helper-label">Sort by</InputLabel>
                     <Select
@@ -97,12 +134,20 @@ const ArticleList = () => {
                     </Select>
                 </FormControl>
             </section>
-            <section className="article-list big-screen">
+            <section className="article-list">
                 {articles.map((article) => {
                    return  <ArticleCard key={article.article_id} article={article}/> 
                 })}
             </section>
-        </>
+            <section>
+                <button disabled={loadMoreDisabled} onClick={ () => handleLoadMore()} className="article-list-load-button">
+                    Load more
+                </button>
+                { articles.length > 10 && <button onClick={handleLoadLess} className="article-list-load-button">
+                    Load less
+                </button>}
+            </section>
+        </section>
     )
 }
 
