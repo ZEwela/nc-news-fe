@@ -5,7 +5,7 @@ import { postCommentByArticleId } from "../api"
 
 const AddComment = ({articleId, setComments, setShowComments, setCommentCount}) => {
     const {user} = useContext(UserContext)
-    const [newComment] = useState({username: user.username,})
+    const [newComment] = useState({username: user.username})
     const [commentBody, setCommentBody] = useState("")
     const [errorMsg, setErrorMsg] = useState(null)
     const [disabledAddCommentButton, setDisabledAddCommentButton] = useState(false)
