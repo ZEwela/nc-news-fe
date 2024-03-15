@@ -18,12 +18,7 @@ const SingleArticle = () => {
             setArticle(articleFromApi)
             setLoading(false)
         }).catch(err => {
-            setError((currErr) => {
-                return {...currErr, 
-                    msg: err.response.data.msg, 
-                    status: err.response.status, 
-                 }
-            })
+            setError({msg: err.response.data.msg, status: err.response.status })
             setLoading(false)
         })
     }, [article_id])

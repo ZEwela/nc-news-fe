@@ -7,8 +7,6 @@ export const ErrorProvider = ({children}) => {
         msg: null,
         status: null,
         reloadButton: false,
-        optionText: null,
-        optionAction: null,
     })
 
     const resetError = () => {
@@ -16,8 +14,6 @@ export const ErrorProvider = ({children}) => {
             msg: null,
             status: null,
             reloadButton: false,
-            optionText: null,
-            optionAction: null,
         })
 
     }
