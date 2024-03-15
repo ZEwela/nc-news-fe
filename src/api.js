@@ -50,4 +50,8 @@ export const getTopics = () => {
     })
 }
 
-
+export const postArticle = (body) => {
+    return newsAPI.post('/articles/', body).then(response => {
+        return response.data.article
+    })
+}

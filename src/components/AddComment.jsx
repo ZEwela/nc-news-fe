@@ -58,7 +58,7 @@ const AddComment = ({articleId, setComments, setShowComments, setCommentCount}) 
     return (
         <form className="border add-comment">
             <TextField
-              className="comment-input"
+              className="form-input"
               required
               value={commentBody}
               onChange={handleCommentChange}
@@ -66,7 +66,7 @@ const AddComment = ({articleId, setComments, setShowComments, setCommentCount}) 
               multiline
               maxRows={5}
             />
-            <div className="add-comment-actions">
+            <div className="form-add-actions">
               <button  disabled={disabledAddCommentButton || !commentBody.length} type="submit" onClick={handleAddingComment}>Add comment</button>
               {commentBody.length !== 0 && 
                 <button type="reset" onClick={resetCommentBody}>

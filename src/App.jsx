@@ -5,6 +5,7 @@ import ErrorPage from './components/ErrorPage';
 import SingleArticle from './components/SingleArticle';
 import DrawerDisplay from './components/DrawerDisplay';
 import Header from './components/Header';
+import AddArticle from './components/AddArticle';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <Route path="/articles" element={ <ArticleList />} />
       <Route path="/topics/:topic" element={ <ArticleList />} />
       <Route path="/articles/:article_id" element={<SingleArticle/>} />
+      <Route path='/Add-article' element={<AddArticle/>}/>
       <Route path="*" element={<ErrorPage/>} />
     </Routes>
     </>

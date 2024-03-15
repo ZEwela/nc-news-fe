@@ -83,7 +83,7 @@
   }
 }
 
-.comment-input {
+.form-input {
   flex-grow: 3;
 }
 
@@ -98,6 +98,27 @@
 .comment-card-msg {
   margin: 0;
   gap: 0.5rem
+}
+
+.add-article {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+
+
+  button {
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+.form-add-actions {
+  button {
+    margin: 0.5rem;
+  }
 }
 
 a {
