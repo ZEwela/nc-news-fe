@@ -9,23 +9,16 @@ const CommentsList = ({article_id, comment_count}) => {
     const [comments, setComments] =  useState(null)
     const [loading, setLoading] = useState(true)
     const [showComments, setShowComments] = useState(false)
-    const [showAddComment, setShowAddComment] = useState(false)
+    const [showAddComment, setShowAddComment] = useState(true)
     const [loadMoreButtonDisabled, setLoadMoreButtonDisabled] = useState(false)
     const [lengthOfLoadedComments, setlengthOfLoadedComments] = useState(0)
+    const [commentCount, setCommentCount] = useState(comment_count | 0)
     const [p, setP] = useState(1)
     const [limit] = useState(10)
     
 
     const toggle = (setToggle) => {
         setToggle(curr =>  !curr)
-    }
-
-    const handleTogglingOnAddComment = () => {
-        toggle(setShowAddComment)
-        if(!showComments) toggle(setShowComments)
-    }
-    const handleTogglingOnCancelAddComment = () => {
-        toggle(setShowAddComment)
     }
 
     useEffect(() => {
@@ -63,14 +56,14 @@ const CommentsList = ({article_id, comment_count}) => {
     if (loading) return <Loading/>
     return (
         <section className="border comments-list">
-            { comments.length > 0 && <button onClick={() => toggle(setShowComments)}>{showComments ? 'Hide' : 'Show'} comments: {comment_count}</button>}
+            { comments.length > 0 && <button onClick={() => toggle(setShowComments)}>{showComments ? 'Hide' : 'Show'} comments: {commentCount}</button>}
             { !showAddComment && <button onClick={() => toggle(setShowAddComment)}>Add comment</button>}
-            { showAddComment && <AddComment articleId={article_id} setComments={setComments} handleTogglingOnAddComment={handleTogglingOnAddComment} handleTogglingOnCancelAddComment={handleTogglingOnCancelAddComment}/>}
+            { showAddComment && <AddComment articleId={article_id} setComments={setComments} setShowComments={setShowComments} setCommentCount={setCommentCount}/>}
             { showComments && 
                 <section> 
                     { comments.map((comment) => {
                         return (
-                            <CommentCard key={comment.comment_id} comment={comment} setComments={setComments}/>
+                            <CommentCard key={comment.comment_id} comment={comment} setComments={setComments} setCommentCount={setCommentCount} />
                         )
                     })}
                     <LoadItems itemsLength={comments.length} totalItems={comment_count} limit={limit} loadMoreButtonDisabled={loadMoreButtonDisabled} handleLoadMore={handleLoadMore} handleLoadLess={handleLoadLess}/>

@@ -1,34 +1,58 @@
 import { TextField } from "@mui/material"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {UserContext} from "../context/User"
 import { postCommentByArticleId } from "../api"
 
-const AddComment = ({articleId, setComments, handleTogglingOnAddComment, handleTogglingOnCancelAddComment}) => {
+const AddComment = ({articleId, setComments, setShowComments, setCommentCount}) => {
     const {user} = useContext(UserContext)
-    const [newComment, setNewComment] = useState({username: user.username || null, body: ""})
-    const [error, setError] = useState('');
+    const [newComment] = useState({username: user.username,})
+    const [commentBody, setCommentBody] = useState("")
+    const [errorMsg, setErrorMsg] = useState(null)
+    const [disabledAddCommentButton, setDisabledAddCommentButton] = useState(false)
+
+    const resetCommentBody = () => {
+      setCommentBody("")
+      localStorage.removeItem("comment_body")
+    }
+
+    useEffect(() => {
+      const commentBodyFromLocalStorage = localStorage.getItem('comment_body')
+      if(commentBodyFromLocalStorage) {
+        setCommentBody(commentBodyFromLocalStorage)
+        localStorage.removeItem("comment_body")
+      }
+    }, [])
+  
 
     const handleAddingComment = (e) => {
-        e.preventDefault()
-        const copyOfNewComment = {...newComment, votes: 0, author: user.username, comment_id: user.username + Date.now()}
-        handleTogglingOnAddComment()
+      e.preventDefault()
+      setDisabledAddCommentButton(true)
 
-        setComments(currComments => [copyOfNewComment, ...currComments])
-        postCommentByArticleId(articleId, newComment).then(commentFromApi => {})
-        setNewComment((currNewComment => {return {...currNewComment, body: ""}}))
-    }
+      const commentToBeSendToAPI = {...newComment, body: commentBody }
+
+
+      postCommentByArticleId(articleId, commentToBeSendToAPI)
+        .then((commentFromAPI) => {  
+          resetCommentBody()
+          setComments(currComment => [commentFromAPI, ...currComment])
+          setShowComments(true)
+          setCommentCount(currState => currState + 1)
+          setDisabledAddCommentButton(false)
+        })
+        .catch(() => {
+          setErrorMsg('Something went wrong. Please try again or')
+          setDisabledAddCommentButton(false)
+        })
+      } 
 
     const handleCommentChange = (e) => {
         const { value } = e.target;
+        setCommentBody(value)
+    }
 
-        setNewComment(currComment =>{return {...currComment, body: value}})
-
-
-        if (value.length < 2) {
-            setError('Comment must be at least 2 characters long.');
-          } else {
-            setError('');
-          }
+    const handleReload = () => {
+      localStorage.setItem('comment_body', commentBody)
+      window.location.reload(false)
     }
 
     return (
@@ -36,18 +60,21 @@ const AddComment = ({articleId, setComments, handleTogglingOnAddComment, handleT
             <TextField
               className="comment-input"
               required
-              error={!!error}
-              helperText={error}
-              value={newComment.body}
+              value={commentBody}
               onChange={handleCommentChange}
               label="Type your comment here"
               multiline
               maxRows={5}
             />
             <div className="add-comment-actions">
-              <button  disabled={newComment.body.length < 2} type="submit" onClick={handleAddingComment}>Add comment</button>
-              <button type="reset" onClick={handleTogglingOnCancelAddComment}>Cancel</button>
+              <button  disabled={disabledAddCommentButton || !commentBody.length} type="submit" onClick={handleAddingComment}>Add comment</button>
+              {commentBody.length !== 0 && 
+                <button type="reset" onClick={resetCommentBody}>
+                  Clear
+                </button>
+              }
             </div>
+            {(errorMsg  && commentBody.length !== 0) && <p className="comment-card-error">{errorMsg}<button onClick={handleReload}>Reload</button></p>}
         </form>
     )
 }
