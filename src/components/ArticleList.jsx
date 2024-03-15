@@ -21,7 +21,7 @@ const ArticleList = () => {
    
     const [sort, setSort] = useState(searchParams.get('sort_by')|| "created_at")
     const [order, setOrder] = useState(searchParams.get('order')||"desc")
-    const [p, setP] = useState(searchParams.get('p')||1)
+    const [p, setP] = useState(1)
     const [limit] = useState(10)
 
     const queries =  [
@@ -36,13 +36,7 @@ const ArticleList = () => {
         for (const entry of searchParams.entries()) {
             if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {
                 setLoading(false)
-                setError((currError => {
-                    return {...currError, 
-                        msg: "Sorry something went wrong",
-                        status: 400, 
-                    }
-                }))
-                return 
+                setError({msg: "Sorry something went wrong", status: 400 })
             }
         }
         getArticles(topic, sort, order, p).then((dataFromApi) => {
@@ -51,12 +45,7 @@ const ArticleList = () => {
             setLoading(false)
         }).catch(err => {
             setLoading(false)
-            setError((currError => {
-                return {...currError, 
-                    msg: err.response.data.msg,
-                    status: err.response.status, 
-                }
-            }))
+            setError({msg: err.response.data.msg, status: err.response.status})
         })
     }, [topic, sort, order])
 
@@ -76,14 +65,6 @@ const ArticleList = () => {
             setlengthOfLoadedArticles(dataFromApi.articles.length)
             if (newP === 1 ) {  setLoadMoreButtonDisabled(false) }
             setArticles(currArticles => { return [...currArticles, ...dataFromApi.articles]})
-        }).catch(err => {
-            setLoading(false)
-            setError((currError => {
-                return {...currError, 
-                    msg: err.response.data.msg,
-                    status: err.response.status, 
-                }
-            }))
         })
     }
 
