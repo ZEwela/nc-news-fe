@@ -1,4 +1,4 @@
-import './App.css'
+import './output.css'
 import ArticleList from './components/ArticleList';
 import { Routes, Route } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
@@ -17,6 +17,7 @@ function App() {
       <Route path="/" element={ <ArticleList />} />
       <Route path="/articles" element={ <ArticleList />} />
       <Route path="/topics/:topic" element={ <ArticleList />} />
+      <Route path="/My-articles" element={ <ArticleList />} />
       <Route path="/articles/:article_id" element={<SingleArticle/>} />
       <Route path='/Add-article' element={<AddArticle/>}/>
       <Route path="*" element={<ErrorPage/>} />

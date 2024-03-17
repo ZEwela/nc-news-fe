@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -22,7 +26,9 @@
 
 .article-card {
   text-decoration: none;
-
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   a {
     text-decoration: none;
     color: black;

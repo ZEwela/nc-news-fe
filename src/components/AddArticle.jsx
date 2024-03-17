@@ -1,124 +1,182 @@
-import { TextField } from "@mui/material"
+
 import { useContext, useEffect, useState } from "react"
 import {UserContext} from "../context/User"
 import { getTopics, postArticle } from "../api"
 import { useNavigate } from "react-router-dom"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@/components/ui/button.jsx"
+import {Input} from "@/components/ui/input.jsx" 
+import { ReloadIcon } from "@radix-ui/react-icons"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form.jsx"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+import AlertView from "./AlertView"
+
+  const addArticleSchema = z.object({
+    title: z.string().min(5, {
+      message: "Title must be at least 5 characters.",
+    }),
+    body: z.string().min(10, {
+      message: "Body must be at least 10 characters.",
+    }),
+    topic: z.string().min(2, {
+        message: "Please choose topic.",
+
+    }),
+    article_img_url: z.string().optional(),
+  });
 
 const AddArticle = () => {
+    const form = useForm({
+        resolver: zodResolver(addArticleSchema),
+        defaultValues: {
+            title: "", 
+            body: "", 
+            topic: "", 
+            article_img_url: ""
+        },
+    })
+
     const {user} = useContext(UserContext)
-    const [newArticle, setNewArticle] = useState({author: user.username, title: "", body: "", topic:"All", article_img_url: "" })
+    const [error, setError] = useState(false)
+    const [loadingPost, setLoadingPost] = useState(false)
     const [topics, setTopics] = useState(null)
-    const [disabledAddArticleButton, setDisabledAddArticleButton] = useState(false)
-    const [errorMsg, setErrorMsg] = useState(null)
-    
+     
     const navigate = useNavigate()
 
     useEffect(() => {
-        const newArticleFromLocalStorage = localStorage.getItem('new_article')
-        if(newArticleFromLocalStorage) {
-            setNewArticle(currState => {return {...currState, ...newArticleFromLocalStorage}})
-            localStorage.removeItem("new_article")
-        }
         getTopics().then(topicsFromApi => {
             setTopics(topicsFromApi)
         })
+        const newArticleFromLocalStorage = JSON.parse(localStorage.getItem('new_article'))
+        if(newArticleFromLocalStorage) {
+            for (let key in newArticleFromLocalStorage) {
+                form.setValue(key, newArticleFromLocalStorage[key])
+            }
+            localStorage.removeItem("new_article")
+        }
     }, [])
+    
 
 
+    function onSubmit(values) {
+      const image_url = values.article_img_url.length !== 0 ? values.article_img_url : null;
 
-    const resetArticleBody = () => {
-      setNewArticle(currState => {return {...currState, title: "", body: "", article_img_url: ""}})
-      localStorage.removeItem("new_article")
-    }
-  
+      const articleToBeSendToAPI = {...values, author: user.username, article_img_url: image_url }
 
-    const handleAddingArticle = (e) => {
-      e.preventDefault()
-      setDisabledAddArticleButton(true)
-      const image_url = newArticle.article_img_url.length !== 0 ? newArticle.article_img_url : null;
-
-      const articleToBeSendToAPI = {...newArticle, article_img_url: image_url }
-
-
+      setLoadingPost(true)
       postArticle(articleToBeSendToAPI)
         .then((articleFromAPI) => { 
-          navigate(`/articles/${articleFromAPI.article_id}`)
-          setDisabledAddArticleButton(false)
+            navigate(`/articles/${articleFromAPI.article_id}`)
         })
         .catch(() => {
-          setErrorMsg('Something went wrong. Please try again or')
-          setDisabledAddArticleButton(false)
+            setLoadingPost(false)
+            setError(true)
         })
-      } 
-
-    const handleArticleChange = (key, value) => {
-        setNewArticle((currArrt) => {return {...currArrt, [key]: value }})
     }
 
     const handleReload = () => {
-      localStorage.setItem('new_article', {body: newArticle.body, topic: newArticle.topic, title: newArticle.title, article_img_url: newArticle.article_img_url})
-      window.location.reload(false)
+       localStorage.setItem('new_article', JSON.stringify(form.getValues()))
+       window.location.reload(false);
     }
 
     return (
-        <form className="border big-screen add-article">
-            <TextField
-              className="comment-input"
-              required
-              value={newArticle.title}
-              onChange={(e) => handleArticleChange("title", e.target.value)}
-              label="Type title here"
-              multiline
-              maxRows={15}
+        <section className="big-screen">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Article title" {...field} />
+                  </FormControl>
+                  <FormDescription/>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <TextField
-              className="comment-input"
-              required
-              value={newArticle.body}
-              onChange={(e) => handleArticleChange("body", e.target.value)}
-              label="Type your article here"
-              multiline
-              maxRows={100}
+            <FormField
+              control={form.control}
+              name="body"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Article body</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Type your artice here..." {...field} />
+                  </FormControl>
+                  <FormDescription/>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <section className="horizontal">
-                <label htmlFor="categories">Choose a Topic</label>
-                <select
-                  name="Topics"
-                  onChange={(e) => handleArticleChange("topic", e.target.value)}
-                >
-                    {topics?.map((topic) => {
-                      if (topic.slug !== "All") {
-                        return (
-                          <option
-                            value={topic.slug}
-                            key={topic.slug}
-                          >
-                            {topic.slug}
-                          </option>
-                        );
-                      }
-                    })}
-                </select>
-            </section>
-            <TextField
-              className="form-input"
-              value={newArticle.article_img_url}
-              onChange={(e) => handleArticleChange("article_img_url", e.target.value)}
-              label="Image URL"
-              multiline
-              maxRows={15}
+            <FormField
+              control={form.control}
+              name="article_img_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Image URL" {...field} />
+                  </FormControl>
+                  <FormDescription/>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <div className="form-add-actions">
-              <button  disabled={disabledAddArticleButton || (newArticle.body.length === 0 || newArticle.title.length === 0)} type="submit" onClick={handleAddingArticle}>Add article</button>
-              {(newArticle.body.length !== 0 || newArticle.title.length !== 0 || newArticle.article_img_url.length !== 0 ) && 
-                <button type="reset" onClick={resetArticleBody}>
-                  Clear
-                </button>
-              }
-            </div>
-            {(errorMsg  && newArticle.body.length !== 0 && newArticle.title.length !== 0) && <p className="comment-card-error">{errorMsg}<button onClick={handleReload}>Reload</button></p>}
-        </form>
+            <FormField
+              control={form.control}
+              name="topic"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel >Topic</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a topic"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <FormDescription/>
+                    <SelectContent>
+                        {topics?.map(topic => {
+                            return <SelectItem  key={topic.slug} value={topic.slug}>{topic.slug}</SelectItem>
+                        })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">{loadingPost ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : 'Submit'}</Button> 
+            <Button type="reset" variant="secondary" className="m-3" onClick={() => {form.reset()}}>Reset</Button>
+            </form>
+            {error && 
+                <div className="flex justify-center">
+                    <AlertView handleReload={handleReload}/>
+                </div>
+            } 
+        </Form>
+       
+
+    </section>
     )
 }
-
+        
 export default AddArticle
