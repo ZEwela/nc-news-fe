@@ -36,14 +36,14 @@ const SingleArticle = () => {
     if (error.msg) return <ErrorPage/>
 
     return (
-        <section className='article-view article-card big-screen'>
-                <h1>{article.title}</h1>  
-                <div className='horizontal'>
+        <section className='flex flex-col big-screen'>
+                <div className='flex flex-col text-sm'>
                     <p><strong>author:</strong> {article.author}</p>
                     <p><strong>created:</strong> {article.created_at.slice(0,10)}</p>
-                </div>    
-                <img src={article.article_img_url}/>  
-                <p>{article.body}</p>
+                </div>
+                <h1 className="md:text-2xl m-4 font-bold text-lg">{article.title}</h1>  
+                <img src={article.article_img_url} alt=""/>  
+                <p className='m-5'>{article.body}</p>
                 <VoteElement votes={article.votes} handleVoting={handleVoting}/>
                 <CommentsList comment_count={+article.comment_count} article_id={article_id}/>
         </section>

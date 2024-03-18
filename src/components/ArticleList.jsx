@@ -3,10 +3,11 @@ import { getArticles } from "../api"
 import ArticleCard from "./ArticleCard"
 import Loading from "./Loading"
 import { ErrorContext } from "../context/Error"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useLocation, useParams, useSearchParams } from "react-router-dom"
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import ErrorPage from "./ErrorPage"
 import LoadItems from "./LoadItems"
+import { UserContext } from "../context/User"
 
 
 const ArticleList = () => {
@@ -16,8 +17,10 @@ const ArticleList = () => {
     const [loadMoreButtonDisabled, setLoadMoreButtonDisabled] = useState(false)
     const [lengthOfLoadedArticles, setlengthOfLoadedArticles] = useState(0)
     const [searchParams, setSearchParams] = useSearchParams();
-    const {error, setError} = useContext(ErrorContext);
+    const {error, setError} = useContext(ErrorContext)
+    const {user} = useContext(UserContext)
     const {topic} = useParams()
+    const location = useLocation()
    
     const [sort, setSort] = useState(searchParams.get('sort_by')|| "created_at")
     const [order, setOrder] = useState(searchParams.get('order')||"desc")
@@ -32,6 +35,10 @@ const ArticleList = () => {
     const acceptableQueryValues =  /^(created_at|comment_count|votes|desc|asc|\d+)$/
 
     useEffect(() => {
+        let author = null
+        if (location.pathname === "/My-articles") {
+            author = user.username
+        }
         setSearchParams((currParams) => {return {...currParams, sort_by: sort, order: order}})
         for (const entry of searchParams.entries()) {
             if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {
@@ -39,7 +46,7 @@ const ArticleList = () => {
                 setError({msg: "Sorry something went wrong", status: 400 })
             }
         }
-        getArticles(topic, sort, order, p).then((dataFromApi) => {
+        getArticles(topic, sort, order, p, author).then((dataFromApi) => {
             setArticles(dataFromApi.articles)
             setTotalArticles(dataFromApi.total_count)
             setLoading(false)
@@ -59,9 +66,13 @@ const ArticleList = () => {
 
 
     const handleLoadMore = () => {
+        let author = null
+        if (location.pathname === "/My-articles") {
+            author = user.username
+        }
         setP(currState =>  {return Number(currState)+1})
         const newP = String(+p + 1)
-        getArticles(topic, sort, order, newP).then((dataFromApi) => {
+        getArticles(topic, sort, order, newP,author).then((dataFromApi) => {
             setlengthOfLoadedArticles(dataFromApi.articles.length)
             if (newP === 1 ) {  setLoadMoreButtonDisabled(false) }
             setArticles(currArticles => { return [...currArticles, ...dataFromApi.articles]})
@@ -82,6 +93,7 @@ const ArticleList = () => {
         })
     }
 
+
     if (loading) return <Loading/>
     if(error.msg) return <ErrorPage />
     if(!articles?.length) return <p className="big-screen">There are no articles in this section</p>
@@ -91,10 +103,10 @@ const ArticleList = () => {
         <section className="big-screen">
             <section >
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="demo-simple-select-helper-label">Sort by</InputLabel>
+                    <InputLabel  htmlFor="sort-by" id="sort-by">Sort by</InputLabel>
                     <Select
-                      labelId="demo-simple-select-helper-label"
-                      id="demo-simple-select-helper"
+                      labelId="sort-by"
+                      id="sort-by"
                       value={sort}
                       label="Sort by"
                       onChange={handleChange}
@@ -105,10 +117,10 @@ const ArticleList = () => {
                     </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="demo-simple-select-helper-label">Order</InputLabel>
+                    <InputLabel htmlFor="order" id="order">Order</InputLabel>
                     <Select
-                      labelId="demo-simple-select-helper-label"
-                      id="demo-simple-select-helper"
+                      labelId="order"
+                      id="order"
                       value={order}
                       label="Order"
                       onChange={handleOrderChange}
@@ -118,9 +130,9 @@ const ArticleList = () => {
                     </Select>
                 </FormControl>
             </section>
-            <section className="article-list">
+            <section className="flex flex-col items-center gap-5 ">
                 {articles.map((article) => {
-                   return  <ArticleCard key={article.article_id} article={article}/> 
+                   return  <ArticleCard key={article.article_id} article={article} setArticles={setArticles}/> 
                 })}
             </section>
             <LoadItems  itemsLength={articles.length} totalItems={totalArticles} limit={limit} loadMoreButtonDisabled={loadMoreButtonDisabled} handleLoadMore={handleLoadMore} handleLoadLess={handleLoadLess}/>

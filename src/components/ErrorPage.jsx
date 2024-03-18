@@ -7,7 +7,6 @@ const ErrorPage = () => {
     const navigate = useNavigate()
     const location =  useLocation()
 
-
     useEffect(() => {
         let errMsg = error.msg;
         const otherOptionsChange = {}

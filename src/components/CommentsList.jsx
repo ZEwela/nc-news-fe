@@ -55,12 +55,12 @@ const CommentsList = ({article_id, comment_count}) => {
 
     if (loading) return <Loading/>
     return (
-        <section className="border comments-list">
+        <section className="flex flex-col gap-2">
             { comments.length > 0 && <button onClick={() => toggle(setShowComments)}>{showComments ? 'Hide' : 'Show'} comments: {commentCount}</button>}
             { !showAddComment && <button onClick={() => toggle(setShowAddComment)}>Add comment</button>}
             { showAddComment && <AddComment articleId={article_id} setComments={setComments} setShowComments={setShowComments} setCommentCount={setCommentCount}/>}
             { showComments && 
-                <section> 
+                <section className="flex flex-col gap-4"> 
                     { comments.map((comment) => {
                         return (
                             <CommentCard key={comment.comment_id} comment={comment} setComments={setComments} setCommentCount={setCommentCount} />

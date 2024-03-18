@@ -23,7 +23,7 @@ const DrawerDisplay = () => {
       })
     }, [])
 
-    const loggedInActions = [{name: 'My profile', link:""}, {name: 'My articles', link:""}, {name: 'Add article', link:""}]
+    const loggedInActions = [{name: 'My profile', link:""}, {name: 'My articles', link: `/My-articles`}, {name: 'Add article', link:""}]
     const basicActions = [{name: 'All articles', link:"/articles"}]
 
     const formattedLinks = (link) => link.replace(/ /g, '-');

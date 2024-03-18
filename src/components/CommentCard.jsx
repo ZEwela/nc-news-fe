@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import { patchCommentById, removeComment } from "../api"
 import VoteElement from "./VoteElement"
 import { UserContext } from "../context/User"
+import { Button } from "@/components/ui/button.jsx"
 
 const CommentCard = ({comment, setComments, setCommentCount}) => {
 
@@ -27,11 +28,13 @@ const CommentCard = ({comment, setComments, setCommentCount}) => {
     }
         
     return (
-        <section className="border comment-card">
-            <p>{comment.author}</p>
-            <p>{comment.body}</p>
+        <section className="border-2 rounded p-4">
+            <p className=' text-sm'><strong>author:</strong> {comment.author}</p>
+            <p className=' text-sm'><strong>created:</strong> {comment.created_at.slice(0,10)}</p>
+            <p className="m-6">{comment.body}</p>
             <VoteElement votes={comment.votes} handleVoting={handleVoting}/>
-            { user.username === comment.author && <button onClick={handleDeleting} disabled={disabled}>Delete</button>}
+            
+            { user.username === comment.author && <Button variant="destructive" className="m-3" onClick={handleDeleting} disabled={disabled}>Delete</Button>}
             {errorMsg && <p className="comment-card-error">{errorMsg} <button onClick={() => window.location.reload(false)}>Reload</button></p>}
          
         </section>

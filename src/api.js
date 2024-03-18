@@ -55,3 +55,9 @@ export const postArticle = (body) => {
         return response.data.article
     })
 }
+
+export const deleteArticle = (articleId) => {
+    return newsAPI.delete(`/articles/${articleId}`).then(response => {
+        return response.data
+    })
+}

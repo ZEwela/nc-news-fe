@@ -22,11 +22,11 @@ const VoteElement = ({votes, handleVoting}) => {
 
 
     return (
-        <div className="border">
+        <div className="">
             <section className="vote-element">
-                 {<button disabled={upvoteDisabled} onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>}
-                 {votesDisplay !== 0 && <p>Votes: {votesDisplay}</p>}
-                 <button disabled={downvoteDisabled} onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
+                 <button  className={`m-1 border-2 p-1 px-3 rounded-full ${ upvoteDisabled ? "opacity-40 cursor-not-allowed": "hover:bg-slate-100"} `} disabled={upvoteDisabled} onClick={() => {handleVoting(1), handleVotesDisplayChange(1)}}>+</button>
+                  <p>Votes: {votesDisplay}</p>
+                 <button className={`m-1 border-2 p-1 px-3 rounded-full ${ downvoteDisabled ? "opacity-40 cursor-not-allowed": "hover:bg-slate-100"} `} disabled={downvoteDisabled} onClick={() =>{ handleVoting(-1), handleVotesDisplayChange(-1)}}>-</button>
             </section>
         </div>
     )
