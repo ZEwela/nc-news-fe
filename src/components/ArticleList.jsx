@@ -34,11 +34,14 @@ const ArticleList = () => {
         ]
     const acceptableQueryValues =  /^(created_at|comment_count|votes|desc|asc|\d+)$/
 
+
+
     useEffect(() => {
         let author = null
         if (location.pathname === "/My-articles") {
             author = user.username
         }
+
         setSearchParams((currParams) => {return {...currParams, sort_by: sort, order: order}})
         for (const entry of searchParams.entries()) {
             if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {

@@ -83,7 +83,7 @@ const DrawerDisplay = () => {
             { user.username && <>
               <List>
                 { loggedInActions.map((action) => (
-                  <Link  key={action.name} to={formattedLinks(action.name)}>
+                  <Link  key={action.name} to={formattedLinks(action.name)} onClick={() => window.location.href=formattedLinks(action.name) }>
                     <ListItem disablePadding>
                       <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={action.name} />
