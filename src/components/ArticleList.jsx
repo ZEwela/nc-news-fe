@@ -46,7 +46,7 @@ const ArticleList = () => {
         for (const entry of searchParams.entries()) {
             if (!queries.includes(entry[0]) || !acceptableQueryValues.test(entry[1])) {
                 setLoading(false)
-                setError({msg: "Sorry something went wrong", status: 400 })
+                setError({msg: "Sorry something went wrong!", status: 400 })
             }
         }
         getArticles(topic, sort, order, p, author).then((dataFromApi) => {
@@ -55,7 +55,7 @@ const ArticleList = () => {
             setLoading(false)
         }).catch(err => {
             setLoading(false)
-            setError({msg: err.response.data.msg, status: err.response.status})
+            setError({msg: err.response.status === 400 ? 'Sorry something went wrong!' : err.response?.data?.msg, status: err.response?.status})
         })
     }, [topic, sort, order])
 

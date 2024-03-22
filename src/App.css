@@ -153,6 +153,13 @@ a.logo {
   gap: 1rem;
 }
 
+.error-button {
+  padding: 0.5rem;
+  margin: 1rem;
+  border-radius: 15px;
+  border: 1px solid black;
+}
+
 .article-list-load-button {
   margin: 1rem;
 }

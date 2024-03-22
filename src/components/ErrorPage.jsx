@@ -20,7 +20,7 @@ const ErrorPage = () => {
             } else {
                 errMsg = "Page Not Found"
             }
-        } else if (error.status){
+        } else if (error.status === 400){
             errMsg = "Sorry something went wrong!"
             otherOptionsChange.reloadButton = true
         } 
@@ -33,10 +33,10 @@ const ErrorPage = () => {
             <p>{error.msg}</p>
             <section className="error-buttons">
                 {error.reloadButton && (
-                    <button onClick={() =>{window.location.reload(false); resetError()}}>Try again</button>
+                    <button className="error-button" onClick={() =>{window.location.reload(false); resetError()}}>Try again</button>
                 )}
-                <button onClick={() =>{window.location.href="/articles"; resetError()}}>Go to main</button>
-                <button onClick={() => { resetError, navigate(location.search === "" ? -1 : -2 )}}>Go back</button>
+                <button className='error-button' onClick={() =>{window.location.href="/articles"; resetError()}}>Go to main</button>
+                <button className="error-button" onClick={() => { resetError, navigate(location.search === "" ? -1 : -2 )}}>Go back</button>
             </section>
         </section>
     )
