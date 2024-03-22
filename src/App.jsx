@@ -6,6 +6,7 @@ import SingleArticle from './components/SingleArticle';
 import DrawerDisplay from './components/DrawerDisplay';
 import Header from './components/Header';
 import AddArticle from './components/AddArticle';
+import MyProfile from './components/MyProfile';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
       <Route path="/My-articles" element={ <ArticleList />} />
       <Route path="/articles/:article_id" element={<SingleArticle/>} />
       <Route path='/Add-article' element={<AddArticle/>}/>
+      <Route path='/My-profile' element={<MyProfile/>}/>
       <Route path="*" element={<ErrorPage/>} />
     </Routes>
     </>

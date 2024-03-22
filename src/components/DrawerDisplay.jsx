@@ -23,7 +23,7 @@ const DrawerDisplay = () => {
       })
     }, [])
 
-    const loggedInActions = [{name: 'My profile', link:""}, {name: 'My articles', link: `/My-articles`}, {name: 'Add article', link:""}]
+    const loggedInActions = [{name: 'My profile', link:"/My-profile"}, {name: 'My articles', link: `/My-articles`}, {name: 'Add article', link:"/Add-article"}]
     const basicActions = [{name: 'All articles', link:"/articles"}]
 
     const formattedLinks = (link) => link.replace(/ /g, '-');
@@ -69,7 +69,7 @@ const DrawerDisplay = () => {
               <List>
                 <ListSubheader>Topics</ListSubheader> 
                 {topics.map((topic) => (
-                  <Link  key={topic.slug} to={`/topics/${topic.slug}`} onClick={() => window.location.href=`/topics/${topic.slug}`}>
+                  <Link  key={topic.slug} to={`/topics/${topic.slug}`} >
                     <ListItem disablePadding>
                       <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={topic.slug} />
@@ -83,7 +83,7 @@ const DrawerDisplay = () => {
             { user.username && <>
               <List>
                 { loggedInActions.map((action) => (
-                  <Link  key={action.name} to={formattedLinks(action.name)} onClick={() => window.location.href=formattedLinks(action.name) }>
+                  <Link  key={action.name} to={formattedLinks(action.name)} onClick={() => window.location.href=action.link }>
                     <ListItem disablePadding>
                       <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={action.name} />
