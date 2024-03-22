@@ -135,10 +135,9 @@ a {
 a.logo {
     display: block;
     position: relative;
-    left: 16px;
-    text-align: left;
-    width: fit-content;
-
+    text-align: center;
+    font-size: xx-large;
+    font-weight: 700;
 }
 
 .error-page {
@@ -172,5 +171,13 @@ a.logo {
     top: 0;
     left: 0;
     z-index: 1201;
+    font-size: xx-large;
+    font-weight: 900;
+    padding: 1rem;
+    
+  }
+  a.logo {
+    width: fit-content;
+
   }
 }
