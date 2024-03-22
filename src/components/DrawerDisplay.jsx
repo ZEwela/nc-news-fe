@@ -5,6 +5,7 @@ import { getTopics } from "../api";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/User";
 import { ErrorContext } from "../context/Error";
+import { ArticlesDisplayToggleContext } from "../context/ArticlesDisplayToggle";
 
 
 const DrawerDisplay = () => {
@@ -14,6 +15,7 @@ const DrawerDisplay = () => {
 
     const {user} = useContext(UserContext)
     const {resetError} = useContext(ErrorContext)
+    const {setArticlesDisplayToggle} = useContext(ArticlesDisplayToggleContext)
 
     const drawerWidth = 240;
 
@@ -25,8 +27,6 @@ const DrawerDisplay = () => {
 
     const loggedInActions = [{name: 'My profile', link:"/My-profile"}, {name: 'My articles', link: `/My-articles`}, {name: 'Add article', link:"/Add-article"}]
     const basicActions = [{name: 'All articles', link:"/articles"}]
-
-    const formattedLinks = (link) => link.replace(/ /g, '-');
 
   
     const handleDrawerClose = () => {
@@ -45,8 +45,11 @@ const DrawerDisplay = () => {
       }
     };
 
-  
-
+    const toggleArticlesDisplay = (action) => {
+        if (action === "/articles" || action === "/My-articles") {
+          setArticlesDisplayToggle(currState => !currState)
+        }
+    }
 
     const drawer = (
         <>
@@ -54,7 +57,7 @@ const DrawerDisplay = () => {
             <Divider />
             <List>
               { basicActions.map((action) => (
-                <Link key={action.name} to={action.link}>
+                <Link key={action.name} to={action.link} onClick={() => toggleArticlesDisplay(action.link)}>
                   <ListItem  disablePadding>
                     <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={action.name} />
@@ -83,7 +86,7 @@ const DrawerDisplay = () => {
             { user.username && <>
               <List>
                 { loggedInActions.map((action) => (
-                  <Link  key={action.name} to={formattedLinks(action.name)} >
+                  <Link  key={action.name} to={action.link} onClick={() => toggleArticlesDisplay(action.link)}>
                     <ListItem disablePadding>
                       <ListItemButton onClick={handleDrawerClose}>
                         <ListItemText primary={action.name} />

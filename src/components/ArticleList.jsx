@@ -8,6 +8,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import ErrorPage from "./ErrorPage"
 import LoadItems from "./LoadItems"
 import { UserContext } from "../context/User"
+import { ArticlesDisplayToggleContext } from "../context/ArticlesDisplayToggle"
 
 
 const ArticleList = () => {
@@ -19,6 +20,7 @@ const ArticleList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const {error, setError} = useContext(ErrorContext)
     const {user} = useContext(UserContext)
+    const {articlesDisplayToggle} = useContext(ArticlesDisplayToggleContext)
     const {topic} = useParams()
     const location = useLocation()
    
@@ -57,7 +59,7 @@ const ArticleList = () => {
             setLoading(false)
             setError({msg: err.response.status === 400 ? 'Sorry something went wrong!' : err.response?.data?.msg, status: err.response?.status})
         })
-    }, [topic, sort, order])
+    }, [topic, sort, order, articlesDisplayToggle])
 
     const handleChange = (e) => {
         setSort(e.target.value)
